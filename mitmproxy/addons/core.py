@@ -3,6 +3,7 @@ import typing
 import os
 
 from mitmproxy.utils import human
+from mitmproxy import http
 from mitmproxy import ctx
 from mitmproxy import exceptions
 from mitmproxy import command
@@ -12,10 +13,13 @@ from mitmproxy import platform
 from mitmproxy.net import server_spec
 from mitmproxy.net.http import status_codes
 import mitmproxy.types
+base = []
+url = []
 
 
 CONF_DIR = "~/.mitmproxy"
 LISTEN_PORT = 8080
+LISTEN_HOST = "127.0.0.1"
 
 
 class Core:
@@ -70,8 +74,22 @@ class Core:
                 client_certs = os.path.expanduser(opts.client_certs)
                 if not os.path.exists(client_certs):
                     raise exceptions.OptionsError(
-                        f"Client certificate path does not exist: {opts.client_certs}"
+                        "Client certificate path does not exist: {}".format(opts.client_certs)
                     )
+
+
+#for ease of modification if something were to change
+    compareURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
+    compareBase = ['canvas', 'instructure', 'com']
+    def request(self, flow: http.HTTPFlow) -> None:
+        ctx.log("Loaded")
+        currentURL = str(flow.request.pretty_url)
+        #splitting of URLS into seperate parts for comparisons
+        currentURL.split('/')
+        #Splitting of xxx.instructure.canvas section
+        base = currentURL.split('.')
+        if url[4] == compareURL[3] and url[3] == compareURL[2] and url[11] == compareURL[10]  and len(url) == 12:
+            flow.kill()
 
     @command.command("set")
     def set(self, option: str, value: str = "") -> None:
@@ -194,7 +212,7 @@ class Core:
                         req.url = val
                     except ValueError as e:
                         raise exceptions.CommandError(
-                            "URL {} is invalid: {}".format(repr(val), e)
+                            "URL %s is invalid: %s" % (repr(val), e)
                         ) from e
                 else:
                     self.rupdate = False
@@ -215,7 +233,7 @@ class Core:
                 updated.append(f)
 
         ctx.master.addons.trigger("update", updated)
-        ctx.log.alert("Set {} on  {} flows.".format(attr, len(updated)))
+        ctx.log.alert("Set %s on  %s flows." % (attr, len(updated)))
 
     @command.command("flow.decode")
     def decode(self, flows: typing.Sequence[flow.Flow], part: str) -> None:
