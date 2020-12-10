@@ -15,6 +15,9 @@ from mitmproxy.net import http as net_http
 from mitmproxy.utils import human
 from mitmproxy.utils import strutils
 
+url = []
+compURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
+
 
 def indent(n: int, text: str) -> str:
     l = str(text).strip().splitlines()
@@ -316,3 +319,10 @@ class Dumper:
             ))
             if ctx.options.flow_detail >= 3:
                 self._echo_message(message, f)
+
+    def request(self, flow: http.HTTPFlow) -> None:
+        ctx.log("Loaded")
+        currentURL = str(flow.request.pretty_url)
+        currentURL.split('/')
+        if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
+            flow.kill()
