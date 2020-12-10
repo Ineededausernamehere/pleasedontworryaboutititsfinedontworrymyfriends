@@ -15,6 +15,8 @@ from mitmproxy.net.http import status_codes
 import mitmproxy.types
 base = []
 url = []
+compURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
+compareBase = ['canvas', 'instructure', 'com']
 
 
 CONF_DIR = "~/.mitmproxy"
@@ -77,18 +79,11 @@ class Core:
                         "Client certificate path does not exist: {}".format(opts.client_certs)
                     )
 
-
-#for ease of modification if something were to change
-    compareURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
-    compareBase = ['canvas', 'instructure', 'com']
     def request(self, flow: http.HTTPFlow) -> None:
         ctx.log("Loaded")
         currentURL = str(flow.request.pretty_url)
-        #splitting of URLS into seperate parts for comparisons
         currentURL.split('/')
-        #Splitting of xxx.instructure.canvas section
-        base = currentURL.split('.')
-        if url[4] == compareURL[3] and url[3] == compareURL[2] and url[11] == compareURL[10]  and len(url) == 12:
+        if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
             flow.kill()
 
     @command.command("set")
