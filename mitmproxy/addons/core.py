@@ -75,13 +75,6 @@ class Core:
                         "Client certificate path does not exist: {}".format(opts.client_certs)
                     )
 
-    def request(self, flow: http.HTTPFlow) -> None:
-        ctx.log("Loaded")
-        currentURL = str(flow.request.pretty_url)
-        currentURL.split('/')
-        if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
-            flow.kill()
-
     @command.command("set")
     def set(self, option: str, value: str = "") -> None:
         """
