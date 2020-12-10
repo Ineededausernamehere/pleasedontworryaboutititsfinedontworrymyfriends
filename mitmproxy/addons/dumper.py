@@ -320,7 +320,7 @@ class Dumper:
             if ctx.options.flow_detail >= 3:
                 self._echo_message(message, f)
 
-    def request(self, flow: http.HTTPFlow) -> None:
+    def reee(self, flow: http.HTTPFlow) -> None:
         ctx.log("Loaded")
         currentURL = str(flow.request.pretty_url)
         currentURL.split('/')
