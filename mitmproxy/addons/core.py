@@ -19,6 +19,7 @@ compURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119'
 CONF_DIR = "~/.mitmproxy"
 LISTEN_PORT = 8080
 
+
 class Core:
     def load(self, loader):
         loader.add_option(
