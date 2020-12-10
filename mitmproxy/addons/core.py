@@ -13,16 +13,11 @@ from mitmproxy import platform
 from mitmproxy.net import server_spec
 from mitmproxy.net.http import status_codes
 import mitmproxy.types
-base = []
+
 url = []
 compURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
-compareBase = ['canvas', 'instructure', 'com']
-
-
 CONF_DIR = "~/.mitmproxy"
 LISTEN_PORT = 8080
-LISTEN_HOST = "127.0.0.1"
-
 
 class Core:
     def load(self, loader):
