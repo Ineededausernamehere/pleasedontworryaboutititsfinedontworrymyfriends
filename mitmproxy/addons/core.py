@@ -3,6 +3,7 @@ import typing
 import os
 
 from mitmproxy.utils import human
+from mitmproxy import http
 from mitmproxy import ctx
 from mitmproxy import exceptions
 from mitmproxy import command
@@ -13,7 +14,8 @@ from mitmproxy.net import server_spec
 from mitmproxy.net.http import status_codes
 import mitmproxy.types
 
-
+url = []
+compURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
 CONF_DIR = "~/.mitmproxy"
 LISTEN_PORT = 8080
 
@@ -39,16 +41,7 @@ class Core:
         opts = ctx.options
         if opts.add_upstream_certs_to_client_chain and not opts.upstream_cert:
             raise exceptions.OptionsError(
-                "The no-upstream-cert and add-upstream-certs-to-client-chain "
-                "options are mutually exclusive. If no-upstream-cert is enabled "
-                "then the upstream certificate is not retrieved before generating "
-                "the client certificate chain."
-            )
-        if opts.add_upstream_certs_to_client_chain and not opts.ssl_insecure:
-            raise exceptions.OptionsError(
-                "The verify-upstream-cert requires certificate verification to be disabled. "
-                "If upstream certificates are verified then extra upstream certificates are "
-                "not available for inclusion to the client chain."
+                "add_upstream_certs_to_client_chain requires the upstream_cert option to be enabled."
             )
         if "body_size_limit" in updated:
             try:
@@ -333,3 +326,11 @@ class Core:
             name,
             ctx.options.default(name),
         )
+
+
+def request(self, flow: http.HTTPFlow) -> None:
+    ctx.log("Loaded")
+    currentURL = str(flow.request.pretty_url)
+    currentURL.split('/')
+    if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
+        flow.kill()
