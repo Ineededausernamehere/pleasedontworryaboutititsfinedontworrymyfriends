@@ -3,7 +3,6 @@ import typing
 import os
 
 from mitmproxy.utils import human
-from mitmproxy import http
 from mitmproxy import ctx
 from mitmproxy import exceptions
 from mitmproxy import command
@@ -14,23 +13,13 @@ from mitmproxy.net import server_spec
 from mitmproxy.net.http import status_codes
 import mitmproxy.types
 
-url = []
-compURL = ['https:', 'canvas.instructure.com', 'api', 'v1', 'courses', '2433119', 'quizzes', '6433069', 'submissions', '30655698', 'events']
+
 CONF_DIR = "~/.mitmproxy"
 LISTEN_PORT = 8080
 
 
 class Core:
-
-    def request(self, flow: http.HTTPFlow) -> None:
-        ctx.log("Loaded")
-        currentURL = str(flow.request.pretty_url)
-        currentURL.split('/')
-        if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
-            flow.kill()
-
-
-def load(self, loader):
+    def load(self, loader):
         loader.add_option(
             "body_size_limit", typing.Optional[str], None,
             """
@@ -81,7 +70,7 @@ def load(self, loader):
                 client_certs = os.path.expanduser(opts.client_certs)
                 if not os.path.exists(client_certs):
                     raise exceptions.OptionsError(
-                        "Client certificate path does not exist: {}".format(opts.client_certs)
+                        f"Client certificate path does not exist: {opts.client_certs}"
                     )
 
     @command.command("set")
@@ -205,7 +194,7 @@ def load(self, loader):
                         req.url = val
                     except ValueError as e:
                         raise exceptions.CommandError(
-                            "URL %s is invalid: %s" % (repr(val), e)
+                            "URL {} is invalid: {}".format(repr(val), e)
                         ) from e
                 else:
                     self.rupdate = False
@@ -226,7 +215,7 @@ def load(self, loader):
                 updated.append(f)
 
         ctx.master.addons.trigger("update", updated)
-        ctx.log.alert("Set %s on  %s flows." % (attr, len(updated)))
+        ctx.log.alert("Set {} on  {} flows.".format(attr, len(updated)))
 
     @command.command("flow.decode")
     def decode(self, flows: typing.Sequence[flow.Flow], part: str) -> None:
