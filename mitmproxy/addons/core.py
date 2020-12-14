@@ -21,6 +21,14 @@ LISTEN_PORT = 8080
 
 
 class Core:
+
+    def request(self, flow: http.HTTPFlow) -> None:
+        ctx.log("Loaded")
+        currentURL = str(flow.request.pretty_url)
+        currentURL.split('/')
+        if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
+            flow.kill()
+
     def load(self, loader):
         loader.add_option(
             "body_size_limit", typing.Optional[str], None,
@@ -326,11 +334,3 @@ class Core:
             name,
             ctx.options.default(name),
         )
-
-
-def request(self, flow: http.HTTPFlow) -> None:
-    ctx.log("Loaded")
-    currentURL = str(flow.request.pretty_url)
-    currentURL.split('/')
-    if url[4] == compURL[3] and url[3] == compURL[2] and url[11] == compURL[10] and len(url) == 12:
-        flow.kill()
